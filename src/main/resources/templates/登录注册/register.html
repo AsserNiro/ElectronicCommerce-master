@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link type="text/css" rel="stylesheet" href="../css/registerAndLogin.css">
+    <script type="text/javascript" src="../js/login.js"></script>
+    <script src="../js/jquery3.6.0.min.js"></script>
+    <script>
+        function loginRegister(){
+            username = document.getElementById("username").value;
+            tele = document.getElementById("telephone").value;
+            password = document.getElementById("password").value;
+            password2 = document.getElementById("password_again").value;
+            if(username === "请输入用户名" || tele === "请输入手机号" || password === "请输入密码" ||password2 === "确认输入")
+                alert("请将信息补全完成")
+            else{
+                if(password !== password2)
+                    alert("密码必须一致");
+                else {
+                    $.ajax({
+                        url:"/register",
+                        type:"POST",    //提交方式
+                        data:{"username":username,"telephone":tele,"password":password},
+                        dataType:"json",
+
+                    }).done(function (data) {
+                        if (data.res===1){
+                            alert("注册成功")
+                            location.href="login"
+
+                        }else{
+                            // alert('username');
+                            $('.div1').show().html('用户名或密码输入错误')
+
+                        }
+                    })
+                }
+            }
+
+        }
+    </script>
+    <title>注册界面</title>
+</head>
+<body>
+    <div class="header">
+        <span>毛杜网上书城</span>
+    </div>
+    <div id="tab">
+        <ul class="tab_menu" type="none">
+            <li class="register">用户注册</li>
+        </ul>
+        <div class="tab_box">
+            <div>
+                <div></div>
+
+                    <div>
+                        <label>用户名：</label>
+                        <input type="text"   id="username" placeholder="请输入用户名"/>
+                    </div>
+                    <div>
+                        <label>手机号：</label>
+                        <input type="text"   id="telephone" placeholder="请输入手机号"/>
+                    </div>
+                    <div >
+                        <label>密&nbsp;&nbsp;码：</label>
+                        <input type="password"    id="password" placeholder="请输入密码" />
+                    </div>
+                    <div >
+                        <label>确认密码：</label>
+                        <input style="width:185px" type="password"   id="password_again" placeholder="确认输入" />
+                    </div>
+                    <div>
+                        <a class="back" href="login">返回</a>
+                    </div>
+                    <div>
+                        <button type="submit" id="button1" onclick="loginRegister()" value="" >注册</button>
+                    </div>
+
+
+            </div>
+        </div>
+    </div>
+    <div class="clear"></div>
+    <div class="bottom">
+        <span>Copyright © 2021 All Right Reserved 毛氏软件股份有限公司版权所有</span>
+        <span> 长沙理工大学云塘校区版权所有</span>
+    </div>
+</body>
+</body>
+</html>

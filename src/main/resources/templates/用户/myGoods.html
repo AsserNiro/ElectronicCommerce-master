@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link type="text/css" rel="stylesheet" href="../css/myGoods.css">
+    <script src="../js/jquery3.6.0.min.js"></script>
+    <script src="../js/cookie.js"></script>
+    <script src="../js/getUrlParam.js"></script>
+    <title>我的订单界面</title>
+    <script>
+        function per() {
+            let name = cookie.getCookie("name");
+            console.log(name)
+            cookie.setCookie("myname", name)
+            window.event.returnValue = false;
+            window.location.href = "/personInfo";
+        }
+    </script>
+    <script>
+        function deleteOrder(id) {
+            if(confirm("是否删除订单？")){
+                $(document).ready(function () {
+                    //获取tbody
+                    // alert("123")
+                    let orderData = $("#myorder");
+                    let temp = '';
+                    let userId = cookie.getCookie("userId")
+                    $.ajax({
+                        //请求路径servlet
+                        url: "/deleteOrder",
+                        type: "delete",
+                        dataType: "json",
+                        async: true,//是否异步
+                        data: {"orderId": id, "userId": userId},
+                        //请求成功
+                        success: function (msg) {
+                            let orders = msg;
+                            orderData.empty();//清空
+                            for (let i = 0; i < orders.length; i++) {
+                                if (i === 0 || i % 2 === 0) {
+                                    temp += '<tr class="evenNumber">';
+                                } else {
+                                    temp += '<tr>';
+                                }
+                                temp +=
+    '                            <td>' + orders[i].id + '</td>\n' +
+    '                            <td><img src="' + orders[i].img + '"/></td>\n' +
+    '                            <td>\n' +
+    '                                <ul type="none">\n' +
+    '                                    <li>书名：' + orders[i].name + '</li>\n' +
+    '                                    <li>购买时间：' + orders[i].time + '</li>\n' +
+    '                                    <li>实付款：' + orders[i].price + '</li>\n' +
+    '                                    <li>快递单号：' + orders[i].cno + '</li>\n' +
+    '                                </ul>\n' +
+    '                            </td>\n' +
+    '                            <td>\n' +
+    '                                    <button class="button1" type="submit"><a onclick="deleteOrder(' + orders[i].id + ')">删除</a></button>\n' +
+    '                            </td>';
+                            }
+                            orderData.append(temp);
+                        },
+                        //请求失败
+                        error: function (e) {
+                            alert("request failed !")
+                        }
+                    })
+                });
+                alert(删除成功)
+            }else {
+                alert("取消删除");
+            }
+
+        }
+    </script>
+    <script>
+        $(document).ready(function () {
+            //获取tbody
+            // alert("123")
+            let orderData = $("#myorder");
+            let temp = '';
+            let userId = cookie.getCookie("userId")
+            $.ajax({
+                //请求路径servlet
+                url: "/postOrder",
+                type: "post",
+                dataType: "json",
+                async: true,//是否异步
+                data: {"id": userId},
+                //请求成功
+                success: function (msg) {
+                    let orders = msg;
+                    orderData.empty();//清空
+                    for (let i = 0; i < orders.length; i++) {
+                        myId = orders[i].id;
+                        if (i === 0 || i % 2 === 0) {
+                            temp += '<tr class="evenNumber">';
+                        } else {
+                            temp += '<tr>';
+                        }
+                        temp +=
+'                            <td>' + orders[i].id + '</td>\n' +
+'                            <td><img src="' + orders[i].img + '"/></td>\n' +
+'                            <td>\n' +
+'                                <ul type="none">\n' +
+'                                    <li>书名：' + orders[i].name + '</li>\n' +
+'                                    <li>购买时间：' + orders[i].time + '</li>\n' +
+'                                    <li>实付款：' + orders[i].price + '</li>\n' +
+'                                    <li>快递单号：' + orders[i].cno + '</li>\n' +
+'                                </ul>\n' +
+'                            </td>\n' +
+'                            <td>\n' +
+'                                    <button class="button1" type="submit"><a onclick="deleteOrder(' + orders[i].id + ')">删除</a></button>\n' +
+'                            </td>';
+                    }
+                    orderData.append(temp);
+                },
+                //请求失败
+                error: function (e) {
+                    alert("request failed !")
+                }
+            })
+        });
+    </script>
+</head>
+<body>
+<div>
+    <!--顶部-->
+    <div class="top">
+        <div style="float: left;line-height: 40px;
+            margin-left: 50px;
+            font-size: 14px;
+            font-weight:600;">
+            <a href="goodsShow">[返回首页]</a></span>&nbsp;&nbsp;
+        </div>
+        <div>
+            <span class="span1">欢迎光临毛杜网上书城</span>
+        </div>
+        <div class="right">
+            欢迎 &nbsp;&nbsp;<span style="color: orange;" id="user">1</span>&nbsp;&nbsp;访问<span>&nbsp;&nbsp;
+                <script>
+                    let name = cookie.getCookie("name");
+                    document.getElementById("user").innerHTML = ""+name;
+                </script>
+                    <a href="login">[退出登录]</a></span>&nbsp;&nbsp;
+            <a onclick="per()">[个人信息]</a></span>
+        </div>
+    </div>
+
+    <div class="clear"></div>
+
+    <!--logo-->
+    <div class="logo_line">
+        <div style="float: left;margin-left: 200px;">
+            <img style="width: 250px;margin-top: 20px"  src="../picture/当当.png">
+        </div>
+        <div class="search" style="float: left;">
+            <img style="width: 550px;" src="../picture/搜索框.png">
+        </div>
+        <div>
+            <a href="goodscar">
+                <div class="shopcar">
+                    <img width="20px" style="margin-left: 5px;margin-top: 5px;" src="../picture/购物车满.png">
+                    <span>&nbsp;购&nbsp;物&nbsp;车&nbsp;</span>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <div class="divide_line"></div>
+
+    <!--正文-->
+    <div>
+        <div id="center_nav">
+            <h1 id="title">我的订单</h1>
+            <table class="content">
+                <thead>
+                <tr>
+                    <th width="100px">ID</th>
+                    <th width="200px">书籍封面</th>
+                    <th width="300px">详细信息</th>
+                    <th width="150px">操作</th>
+                </tr>
+                </thead>
+                <tbody id="myorder">
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="clear"></div>
+
+    <!--底部-->
+    <div style="  width: 100%;border-bottom: 3px solid #999595;"></div>
+    <div id="bottom1">
+        <ul class="foot_list" type="none">
+            <li>
+                <ul class="float" type="none">
+                    <li class="head">购物指南</li>
+                    <li>购物流程</li>
+                    <li>发票制度</li>
+                    <li>服务协议</li>
+                    <li>会员优惠</li>
+                </ul>
+            </li>
+            <li>
+                <ul class="float" type="none">
+                    <li class="head">支付方式</li>
+                    <li>网上支付</li>
+                    <li>礼品卡支付</li>
+                    <li>银行转帐</li>
+                    <li>礼券支付</li>
+                </ul>
+            </li>
+            <li>
+                <ul class="float" type="none">
+                    <li class="head">配送方式</li>
+                    <li>当日递</li>
+                    <li>次日达</li>
+                    <li>订单自提</li>
+                    <li>验货与签收</li>
+                </ul>
+            </li>
+            <li>
+                <ul class="float" type="none">
+                    <li class="head">退换货</li>
+                    <li>退换货服务查询</li>
+                    <li>自助申请退换货</li>
+                    <li>退换货进度查询</li>
+                    <li>退款方式和时间</li>
+                </ul>
+            </li>
+            <li>
+                <ul class="float" type="none">
+                    <li class="head">商家服务</li>
+                    <li>商家中心</li>
+                    <li>运营服务</li>
+                </ul>
+            </li>
+        </ul>
+        <div class="clear"></div>
+        <div class="foot_line"></div>
+        <p align="center" class="test">
+            <span>Copyright © 2021 All Right Reserved 毛氏软件股份有限公司版权所有</span>
+            <br/>
+            <br/>
+            <span>长沙理工大学云塘校区版权所有 咨询热线：400-658-0166 400-658-1022</span>
+        </p>
+    </div>
+</div>
+</body>
+</html>

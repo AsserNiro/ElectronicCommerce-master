@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录界面</title>
+    <link type="text/css" rel="stylesheet" href="../css/registerAndLogin.css">
+    <script type="text/javascript" src="../js/login.js"></script>
+    <script src="../js/jquery3.6.0.min.js"></script>
+    <script src="../js/cookie.js"></script>
+    <script src="../js/getUrlParam.js"></script>
+    <script src="../js/Validform_v5.3.2_min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            var $tab_li = $('#tab ul li');
+            $tab_li.hover(function(){
+                $(this).addClass('selected').siblings().removeClass('selected');
+                var index = $tab_li.index(this);
+                $('div.tab_box > div').eq(index).show().siblings().hide();
+            });
+        });
+    </script>
+    <script type="text/javascript">
+        $(function() {
+            /*登录信息验证*/
+            $("#username_hide").focus(function () {
+                var username = $(this).val();
+                if (username == '输入账号') {
+                    $(this).val('');
+                }
+            });
+            $("#username_hide").focusout(function () {
+                var username = $(this).val();
+                if (username == '') {
+                    $(this).val('输入账号');
+                }
+            });
+            $("#password_hide").focus(function () {
+                var username = $(this).val();
+                if (username == '输入密码') {
+                    $(this).val('');
+                }
+            });
+            $("#password_hide").focusout(function () {
+                var username = $(this).val();
+                if (username == '') {
+                    $(this).val('输入密码');
+                }
+            });
+            $(".login_error").Validform({
+                tiptype: function (msg, o, cssctl) {
+                    var objtip = $(".error_box");
+                    cssctl(objtip, o.type);
+                    objtip.text(msg);
+                },
+                ajaxPost: true
+            });
+            /*登录信息验证*/
+            $("#username_hide1").focus(function () {
+                var username = $(this).val();
+                if (username == '输入账号') {
+                    $(this).val('');
+                }
+            });
+            $("#username_hide1").focusout(function () {
+                var username = $(this).val();
+                if (username == '') {
+                    $(this).val('输入账号');
+                }
+            });
+            $("#password_hide1").focus(function () {
+                var username = $(this).val();
+                if (username == '输入密码') {
+                    $(this).val('');
+                }
+            });
+            $("#password_hide1").focusout(function () {
+                var username = $(this).val();
+                if (username == '') {
+                    $(this).val('输入密码');
+                }
+            });
+        });
+    </script>
+    <script>
+        function loginUser(){
+            username = document.getElementById("username_hide").value;
+            password = document.getElementById("password_hide").value;
+            if(username === "输入账号" || password === "输入密码")
+                alert("请输入用户名或密码");
+            else {
+                console.log(username)
+                // alert(username+" : "+password)
+                $.ajax({
+                    url:"/login",
+                    type:"POST",    //提交方式
+                    data:{"username":username,"password":password},
+                    dataType:"json",
+
+                }).done(function (data) {
+                    if (data.res>=0){
+
+                        cookie.setCookie("userId",data.res)
+                        cookie.setCookie("name",username)
+                        alert("登录成功")
+                        window.event.returnValue=false;
+                        window.location.href = "/goodsShow"
+                    }else{
+                        // alert('username');
+                        // $('.div1').show().html('用户名或密码输入错误')
+                        alert("用户名或密码输入错误")
+                    }
+                })
+            }
+
+            // var xmlhttp;
+            // if (window.XMLHttpRequest)
+            // {
+            //     xmlhttp=new XMLHttpRequest();
+            // }
+            // else
+            // {
+            //     xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+            // }
+            // xmlhttp.onreadystatechange=function()
+            // {
+            //     if (xmlhttp.readyState===4 && xmlhttp.status===200)
+            //     {
+            //         alert("登录成功");
+            //     }
+            // }
+            // xmlhttp.open("POST","",true);
+            // xmlhttp.send();
+        }
+    </script>
+    <script>
+        function loginAdmin(){
+            username = document.getElementById("username_hide1").value;
+            password = document.getElementById("password_hide1").value;
+            if(username === "" || password === "")
+                alert("请输入用户名或密码");
+            else {
+                $.ajax({
+                    url:"/adminLogin",
+                    type:"POST",    //提交方式
+                    data:{"username":username,"password":password},
+                    dataType:"json",
+
+                }).done(function (data) {
+                    if (data.res==1){
+                        location.href="goodsManage"
+                        alert("登录成功");
+                    }else{
+                        alert("用户名或密码输入错误")
+                    }
+                })
+            }
+
+        }
+    </script>
+</head>
+<body>
+    <div class="header">
+        <span>毛杜网上书城</span>
+    </div>
+    <div id="tab">
+        <ul class="tab_menu" type="none">
+            <li class="selected">用户登录</li>
+            <li>管理员登录</li>
+        </ul>
+        <div class="tab_box">
+            <!-- 用户登录开始 -->
+            <div>
+                <div class="error_box"></div>
+                    <div>
+                        <label>用户名：</label>
+                        <input type="text"  id="username_hide" name="username" placeholder="输入账号"/>
+                    </div>
+                    <div >
+                        <label>密&nbsp;&nbsp;码：</label>
+                        <input type="password"  id="password_hide" name="password" placeholder="输入密码"/>
+                    </div>
+                    <div class="register">
+                        <label><a href="register">注册</a></label>
+                    </div>
+                    <div class="found">
+                        <label><a href="forgetPassword">忘记密码？</a></label>
+                    </div>
+                    <div>
+                        <button type="submit" onclick="loginUser()" id="button1" value="">登录</button>
+                    </div>
+            </div>
+            <!-- 用户登录结束-->
+            <!-- 管理员登录开始-->
+            <div class="hide">
+                <div class="error_box1"></div>
+                    <div id="username">
+                        <label>用户名：</label>
+                        <input type="text" id="username_hide1"  name="username" placeholder="输入账号"/>
+                    </div>
+                    <div id="password">
+                        <label>密&nbsp;&nbsp;码：</label>
+                        <input type="password" id="password_hide1" name="password" placeholder="输入密码" />
+                    </div>
+                    <div id="login">
+                        <button type="submit" onclick="loginAdmin()" >登录</button>
+                    </div>
+            </div>
+            <!-- 管理员登录结束-->
+        </div>
+    </div>
+    <div class="clear"></div>
+    <div class="bottom">
+        <span>Copyright © 2021 All Right Reserved 毛氏软件股份有限公司版权所有</span>
+        <span> 长沙理工大学云塘校区版权所有</span>
+    </div>
+</body>
+</html>

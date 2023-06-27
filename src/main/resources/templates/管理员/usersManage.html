@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link type="text/css" rel="stylesheet" th:href="@{css/users.css}">
+    <script th:src="@{js/jquery3.6.0.min.js}"></script>
+    <script th:src="@{js/cookie.js}"></script>
+    <script th:src="@{js/getUrlParam.js}"></script>
+    <title>用户信息管理</title>
+    <script>
+        function toEditUser(id) {
+            console.log(id)
+            cookie.setCookie("myid",id)
+            window.event.returnValue=false;
+            window.location.href = "/editUsersInfo"
+        }
+        function deleteBook(id) {
+            if (confirm("确认是否删除")) {
+                alert("删除成功");
+                $(document).ready(function () {
+                    //获取tbody
+                    let userData = $("#userData");
+                    let temp = '';
+                    $.ajax({
+                        //请求路径servlet
+                        url: "usersManage",
+                        type: "delete",
+                        dataType: "json",
+                        async: true,//是否异步
+                        data: {"id": id},
+                        //请求成功
+                        success: function (msg) {
+                            let users = msg;
+                            userData.empty();//清空
+                            for (let i = 0; i < users.length; i++) {
+                                myId = users[i].id;
+                                if (i === 0 || i % 2 === 0) {
+                                    temp += '<tr class="evenNumber">\n';
+                                } else {
+                                    temp += '<tr>\n';
+                                }
+                                temp +=
+                                    '<td>' + users[i].id + '</td>\n' +
+                                    '<td>' + users[i].username + '</td>\n' +
+                                    '<td>' + users[i].password + '</td>\n' +
+                                    '<td>' + users[i].telephone + '</td>\n' +
+                                    '<td>' + users[i].address + '</td>\n' +
+                                    '<td>' + users[i].email + '</td>\n' +
+                                    '<td> \n' +
+                                        '<button class="button1" type="submit"><a onclick="deleteBook('+users[i].id+')">删除</a></button>\n' +
+                                        '<button class="button2" type="submit"><a onclick="toEditUser('+users[i].id +')">编辑</a></button>\n' +
+                                    '</td>\n' +
+                                '</tr>';
+                            }
+                            userData.append(temp);
+                        },
+                        //请求失败
+                        error: function (e) {
+                            alert("request failed !")
+                        }
+                    })
+                });
+            } else {
+                alert("取消删除");
+            }
+        }
+    </script>
+    <script>
+        $(document).ready(function () {
+            //获取tbody
+            // alert("123")
+            let userData = $("#userData");
+            let temp = '';
+            $.ajax({
+                //请求路径servlet
+                url: "/usersManage",
+                type: "post",
+                dataType: "json",
+                async: true,//是否异步
+                //请求成功
+                success: function (msg) {
+                    let users = msg;
+                    userData.empty();//清空
+                    for (let i = 0; i < users.length; i++) {
+                        myId = users[i].id;
+                        if (i === 0 || i % 2 === 0) {
+                            temp += '<tr class="evenNumber">';
+                        } else {
+                            temp += '<tr>';
+                        }
+                        temp +=
+                            '<td xmlns="http://www.w3.org/1999/html">' + users[i].id + '</td>' +
+                            '<td>' + users[i].username + '</td>' +
+                            '<td>' + users[i].password + '</td>' +
+                            '<td>' + users[i].telephone + '</td>' +
+                            '<td>' + users[i].address + '</td>' +
+                            '<td>' + users[i].email + '</td>' +
+                            '<td> ' +
+                            '   <button class="button1" type="submit" ><a onclick="deleteBook( '+users[i].id +' )">删除</a></button>\n' +
+                            '   <button class="button2" type="submit" id="btEdit" "><a onclick="toEditUser('+users[i].id +')">编辑</a></button>\n' +
+                            '</td>' +
+                            '</tr>';
+                    }
+                    userData.append(temp);
+                },
+                //请求失败
+                error: function (e) {
+                    alert("request failed !")
+                }
+            })
+        });
+    </script>
+</head>
+<body>
+<div class="header">
+    <img src="../picture/书籍管理.png" height="80px" style="padding-left: 30px;padding-top: 15px;float: left">
+    <p class="p1">毛杜网上书城系统平台(管理员系统)</p>
+    <span class="back"><a href="login">退出系统</a></span>
+    <div class="clear"></div>
+    <p class="p2">Maodu online bookstore system platform</p>
+    <div class="clear"></div>
+</div>
+<div class="clear"></div>
+<div class="information">
+            <span class="time">
+                <script>
+                    var obj = new Date();
+                    var year = obj.getFullYear();
+                    var month = obj.getMonth() + 1;
+                    var date = obj.getDate();
+                    var hour = obj.getHours();
+                    var minute = obj.getMinutes();
+                    var second = obj.getSeconds();
+                    var weekend = obj.getDay(); //获取星期几，这里获得到的是数字1-7，所以我下面自己new了一个数组把获取到的数字当下标
+                    var weeks = new Array("星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六");
+                    var day = weeks[weekend];//这样就是显示的星期x了
+                    // //这些if判断是在小于10的时候前面自动补0
+                    if (month < 10) {
+                        month = '0' + month;
+                    }
+                    if (date < 10) {
+                        date = '0' + date;
+                    }
+                    if (hour < 10) {
+                        hour = '0' + hour;
+                    }
+                    if (minute < 10) {
+                        minute = '0' + minute;
+                    }
+                    if (second < 10) {
+                        second = '0' + second;
+                    }
+                    document.write("   今天是：  " + year + "年" + month + "月" + date + "日 " + day + " " + hour + ":" + minute + ":" + second);
+                </script>
+            </span>
+    <span class="employee">
+               欢迎 管理员 进入毛杜网上书城后台管理系统
+            </span>
+</div>
+<div class="clear"></div>
+<div>
+    <div class="left">
+        <ul type="none">
+            <li><a href="goodsManage">商品信息管理</a></li>
+            <li><a style="color:white;" href="#">用户信息管理</a></li>
+        </ul>
+    </div>
+    <div class="center">
+        <table class="content">
+            <thead>
+            <tr>
+                <th width="100px">ID</th>
+                <th width="100px">用户名</th>
+                <th width="100px">密码</th>
+                <th width="200px">手机号</th>
+                <th width="150px">地址</th>
+                <th width="100px">邮箱</th>
+                <th width="120px">操作</th>
+            </tr>
+            </thead>
+            <tbody id="userData">
+            <!--                    <tr class="evenNumber">-->
+            <!--                        <td>1</td>-->
+            <!--                        <td>张三</td>-->
+            <!--                        <td>123456</td>-->
+            <!--                        <td>12345678911</td>-->
+            <!--                        <td>-->
+            <!--                            <form>-->
+            <!--                                <button class="button1" type="submit"><a href="#">删除</a></button>-->
+            <!--                            </form>-->
+            <!--                            <form >-->
+            <!--                                <button class="button2" type="submit"><a href="editUsersInfo">编辑</a></button>-->
+            <!--                            </form>-->
+            <!--                        </td>-->
+            <!--                    </tr>-->
+            <!--                    <tr>-->
+            <!--                        <td>2</td>-->
+            <!--                        <td>张三</td>-->
+            <!--                        <td>123456</td>-->
+            <!--                        <td>12345678911</td>-->
+            <!--                        <td>-->
+            <!--                            <form>-->
+            <!--                                <button class="button1" type="submit"><a href="#">删除</a></button>-->
+            <!--                            </form>-->
+            <!--                            <form >-->
+            <!--                                <button class="button2" type="submit"><a href="editUsersInfo">编辑</a></button>-->
+            <!--                            </form>-->
+            <!--                        </td>-->
+            <!--                    </tr>-->
+
+            <!--                    <tr class="evenNumber">-->
+            <!--                        <td>3</td>-->
+            <!--                        <td>张三</td>-->
+            <!--                        <td>123456</td>-->
+            <!--                        <td>12345678911</td>-->
+            <!--                        <td>-->
+            <!--                            <form action="#">-->
+            <!--                                <button class="button1" type="submit"><a href="#">删除</a></button>-->
+            <!--                            </form>-->
+            <!--                            <form action="#">-->
+            <!--                                <button class="button2" type="submit"><a href="editUsersInfo">编辑</a></button>-->
+            <!--                            </form>-->
+            <!--                        </td>-->
+            <!--                    </tr>-->
+            <!--                    <tr>-->
+            <!--                        <td>4</td>-->
+            <!--                        <td>张三</td>-->
+            <!--                        <td>123456</td>-->
+            <!--                        <td>12345678911</td>-->
+            <!--                        <td>-->
+            <!--                            <form>-->
+            <!--                                <button class="button1" type="submit"><a href="#">删除</a></button>-->
+            <!--                            </form>-->
+            <!--                            <form >-->
+            <!--                                <button class="button2" type="submit"><a href="editUsersInfo">编辑</a></button>-->
+            <!--                            </form>-->
+            <!--                        </td>-->
+            <!--                    </tr>-->
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

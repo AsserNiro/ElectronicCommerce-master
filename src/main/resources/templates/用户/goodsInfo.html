@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link type="text/css" rel="stylesheet" href="../css/goodsInfo.css">
+    <script src="../js/jquery3.6.0.min.js"></script>
+    <script src="../js/cookie.js"></script>
+    <script src="../js/getUrlParam.js"></script>
+    <title>商品信息</title>
+    <script>
+        function per() {
+            let name = cookie.getCookie("name");
+            // alert(name)
+            console.log(name)
+            cookie.setCookie("myname", name)
+            window.event.returnValue = false;
+            window.location.href = "/personInfo";
+        }
+    </script>
+    <script>
+        function addCar(id){
+            let bookId = id;
+            let userId = cookie.getCookie("userId")
+            console.log(id)
+            cookie.setCookie("bookId",id)
+
+            if(confirm("是否加入购物车？")){
+                $.ajax({
+                    //请求路径servlet
+                    url: "/addCart",
+                    type: "post",
+                    dataType: "json",
+                    data: {"userId":userId,"goodId":bookId},
+                    async: true,//是否异步
+                    //请求成功
+                    success: function (data) {
+                        if (data.res>=0){
+                            alert("添加成功")
+                            window.event.returnValue=false;
+                            window.location.href = "/goodscar"
+                        }else{
+                            alert("添加失败")
+                        }
+                    },
+                    //请求失败
+                    error: function (e) {
+                        alert("request failed !")
+                    }
+                })
+            }else {
+                alert("取消添加")
+            }
+
+        }
+    </script>
+    <script>
+        $(document).ready(function () {
+            //获取tbody
+            // alert("123")
+            let bookData = $("#likebook");
+            let temp = '';
+            $.ajax({
+                //请求路径servlet
+                url: "/goodsManage",
+                type: "post",
+                dataType: "json",
+                async: true,//是否异步
+                //请求成功
+                success: function (msg) {
+                    let books = msg;
+                    bookData.empty();//清空
+                    for (let i = 0; i < 8; i++) {
+                        myId = books[i].id;
+                        temp +=
+    '                        <li>\n' +
+    '                            <a onclick="toSelect('+books[i].id +')">\n' +
+    '                                <img id="image" src="'+ books[i].img+'">\n' +
+    '                                <span id="name">'+ books[i].name+'</span>\n' +
+    '                                <span id="price">¥'+ books[i].price + '元</span>\n' +
+    '                                <p id="comment">1564条评论</p>\n' +
+    '                            </a>\n' +
+    '                        </li>'
+                    }
+                    bookData.append(temp);
+                },
+                //请求失败
+                error: function (e) {
+                    alert("request failed !")
+                }
+            })
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            //获取tbody
+            let bookData = $("#BookInfo");
+            let temp = '';
+            let id = cookie.getCookie("goodId")
+            $.ajax({
+                //请求路径servlet
+                url: "/postGoodInfo",
+                type: "post",
+                dataType: "json",
+                async: true,//是否异步
+                data: {"id": id},
+                //请求成功
+                success: function (msg) {
+                    let books = msg;
+                    bookData.empty();//清空
+                    // alert(books.name)
+                    temp +=
+    '                <img class="img" src="'+books.img+'">\n' +
+    '                <div class="rightInfo">\n' +
+    '                    <ul type="none">\n' +
+    '                        <li>\n' +
+    '                            <span class="head">书名：</span><span class="title">'+books.name+'</span>\n' +
+    '                        </li>\n' +
+    '                        <li>\n' +
+    '                            <span class="head">价格：</span><span class="price">'+books.price+'</span>\n' +
+    '                        </li>\n' +
+    '                        <li>\n' +
+    '                            <span class="head">作者：</span><span class="editer">'+books.author+'</span>\n' +
+    '                        </li>\n' +
+    '                        <li>\n' +
+    '                            <span class="head">简介：</span><div style="margin-left：10px;width: 400px"><span class="introduce" >'+books.introduce+'</span></div>\n' +
+    '                        </li>\n' +
+    '                    </ul>           \n' +
+        '                    <button class="shopcar" type="submit" onclick="addCar('+books.id+')">\n' +
+    '                            <a >\n' +
+    '                                    <img width="20px" style="margin-left: 5px;margin-top: 5px;" src="../picture/购物车满.png">\n' +
+    '                                    <span>&nbsp;购&nbsp;物&nbsp;车&nbsp;</span>\n' +
+    '                            </a>\n' +
+        '                     </button>'+
+    '                </div>'+
+    '               <div class="clear"></div>\n' +
+    '               <div class="center_nav">\n' +
+    '                   <h1 class="title">详情</h1>\n' +
+    '                   <img style="width: 900px;margin-left: 150px;" src=" '+books.detailImg+' ">\n' +
+    '               </div>';
+                    bookData.append(temp);
+                },
+                //请求失败
+                error: function (e) {
+                    alert("request failed !")
+                }
+            })
+        });
+    </script>
+</head>
+<body>
+    <div>
+        <!--顶部-->
+        <div class="top">
+            <div style="float: left;line-height: 40px;
+            margin-left: 50px;
+            font-size: 14px;
+            font-weight:600;">
+                <a href="goodsShow">[返回首页]</a></span>&nbsp;&nbsp;
+            </div>
+            <div>
+                    <span class="span1">欢迎光临毛杜网上书城</span> 
+            </div>
+            <div class="right">
+                欢迎 &nbsp;&nbsp;<span style="color: orange;" id="user">1</span>&nbsp;&nbsp;访问<span>&nbsp;&nbsp;
+                <script>
+                    let name = cookie.getCookie("name");
+                    document.getElementById("user").innerHTML = ""+name;
+                </script>
+                    <a href="login">[退出登录]</a></span>&nbsp;&nbsp;
+                <a onclick="per()">[个人信息]</a></span>
+            </div>
+        </div>
+
+        <div class="clear"></div>
+        
+        <!--logo-->
+        <div class="logo_line">
+            <div style="float: left;margin-left: 200px;">
+                <img  style="width: 250px;margin-top: 20px" src="../picture/当当.png">
+            </div>
+            <div class="search" style="float: left;">
+                <img style="width: 550px;" src="../picture/搜索框.png">
+            </div>
+            <div>
+                <a href="myGoods"> 
+                    <div class="myGoods">
+                        <img width="20px" style="margin-left: 5px;margin-top: 5px;" src="../picture/订单管理.png">
+                        <span>&nbsp;我&nbsp;的&nbsp;订&nbsp;单</span>
+                    </div>
+                </a>
+                <a href="goodscar"> 
+                    <div class="shopcar">
+                        <img width="20px" style="margin-left: 5px;margin-top: 5px;" src="../picture/购物车满.png">
+                        <span>&nbsp;购&nbsp;物&nbsp;车&nbsp;</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+        
+        <div class="divide_line"></div>
+
+        <!--正文-->
+        <div class="content">
+            <div class="info" id="BookInfo">
+
+            </div>
+            
+<!--            <div class="clear"></div>-->
+
+<!--            <div class="center_nav">-->
+<!--                <h1 class="title">详情</h1>-->
+<!--                <img style="width: 900px;margin-left: 150px;" src="../picture/书籍详情.jpg">-->
+<!--            </div>-->
+
+            <!--推荐书籍展示栏-->
+            <div class="center_nav">
+                <h1 class="title">推荐书籍</h1>
+                <div id="center_content">
+                    <ul type="none"  id="likebook">
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+         
+        <div class="clear"></div>
+
+        <!--底部-->
+        <div style="  width: 100%;border-bottom: 3px solid #999595;"></div>
+        <div id="bottom1">
+            <ul class="foot_list" type="none">
+                <li>
+                    <ul class="float" type="none">
+                        <li class="head">购物指南</li>
+                        <li>购物流程</li>
+                        <li>发票制度</li>
+                        <li>服务协议</li>
+                        <li>会员优惠</li>
+                    </ul>
+                </li>
+                <li>
+                    <ul class="float" type="none">
+                        <li class="head">支付方式</li>
+                        <li>网上支付</li>
+                        <li>礼品卡支付</li>
+                        <li>银行转帐</li>
+                        <li>礼券支付</li>
+                    </ul>
+                </li>
+                <li>
+                    <ul class="float" type="none">
+                        <li class="head">配送方式 </li>
+                        <li>当日递</li>
+                        <li>次日达</li>
+                        <li>订单自提</li>
+                        <li>验货与签收</li>
+                    </ul>
+                </li>
+                <li>
+                    <ul class="float" type="none">
+                        <li class="head">退换货</li>
+                        <li>退换货服务查询</li>
+                        <li>自助申请退换货</li>
+                        <li>退换货进度查询</li>
+                        <li>退款方式和时间</li>
+                    </ul>
+                </li>
+                <li>
+                    <ul class="float" type="none">
+                        <li class="head">商家服务</li>
+                        <li>商家中心</li>
+                        <li>运营服务</li>
+                    </ul>
+                </li>
+            </ul>
+            <div class="clear"></div>
+            <div class="foot_line"></div>
+            <p align="center" class="test">
+                <span>Copyright © 2021 All Right Reserved 毛氏软件股份有限公司版权所有</span>
+                <br/>
+                <br/>
+                <span>长沙理工大学云塘校区版权所有 咨询热线：400-658-0166 400-658-1022</span>
+            </p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link type="text/css" rel="stylesheet" href="../css/personInfo.css">
+    <script src="../js/jquery3.6.0.min.js"></script>
+    <script src="../js/cookie.js"></script>
+    <script src="../js/getUrlParam.js"></script>
+    <title>个人信息管理</title>
+    <script>
+        function editUser() {
+            id = cookie.getCookie("userId")
+            username = document.getElementById("username").value;
+            tele = document.getElementById("tele").value;
+            addr = document.getElementById("addr").value;
+            email = document.getElementById("email1").value;
+            $.ajax({
+                url: "/editUsersInfo1",
+                type: "POST",    //提交方式
+                data: {"id":id,"username": username,"telephone": tele, "address": addr, "email": email},
+                dataType: "json",
+            }).done(function (data) {
+                if (data.res === 1) {
+                    location.href = "goodsShow"
+                } else {
+                    $('.div1').show().html('用户名或密码输入错误')
+                }
+            })
+        }
+    </script>
+    <script>
+        $(document).ready(function () {
+            //获取tbody
+            let userData = $("#edit");
+            let temp = '';
+            let id = cookie.getCookie("userId")
+            $.ajax({
+                //请求路径servlet
+                url: "/personInfo",
+                type: "post",
+                dataType: "json",
+                async: true,//是否异步
+                data: {"id": id},
+                //请求成功
+                success: function (msg) {
+                    let users = msg;
+                    userData.empty();//清空
+                    temp +=
+'                                <li>\n' +
+'                                    用户名：<input style="margin-left: 20px;" type="text" id="username" name="username" value="'+users.username+'"/>\n' +
+'                                </li>\n' +
+'                                <li>\n' +
+'                                    电话号码：<input type="text" id="tele" name="telephone" value="'+users.telephone+'"/>\n' +
+'                                </li>\n' +
+'                                <li>\n' +
+'                                    地址：<input style="margin-left: 36px;" type="text" id="addr" name="address" value="'+users.address+'"/>\n' +
+'                                </li>\n' +
+'                                <li>\n' +
+'                                    邮箱：<input style="margin-left: 36px;" type="text" id="email1" name="email" value="'+users.email+'"/>\n' +
+'                                </li>'
+                    ;
+                    userData.append(temp);
+                },
+                //请求失败
+                error: function (e) {
+                    alert("request failed !")
+                }
+            })
+        });
+    </script>
+</head>
+<body>
+    <div>
+          <!--顶部-->
+          <div class="top">
+              <div style="float: left;line-height: 40px;
+                  margin-left: 50px;
+                  font-size: 14px;
+                  font-weight:600;">
+                  <a href="goodsShow">[返回首页]</a></span>&nbsp;&nbsp;
+              </div>
+            <div>
+                    <span class="span1">欢迎光临毛杜网上书城</span> 
+            </div>
+              <div class="right">
+                  欢迎 &nbsp;&nbsp;<span style="color: orange;" id="user"><script>document.write(cookie.getCookie("name"))</script></span>&nbsp;&nbsp;访问<span>&nbsp;&nbsp;
+<!--                <script>-->
+<!--                    let name = cookie.getCookie("myname");-->
+<!--                    alert(name);-->
+<!--                    document.getElementById("user").innerHTML = ""+name;-->
+<!--                </script>-->
+                    <a href="login">[退出登录]</a></span>&nbsp;&nbsp;
+                  <a href="personInfo">[个人信息]</a></span>
+              </div>
+        </div>
+
+        <div class="clear"></div>
+        
+        <!--logo-->
+        <div class="logo_line">
+            <div style="float: left;margin-left: 200px;">
+                <img style="width: 250px;margin-top: 20px"  src="../picture/当当.png">
+            </div>
+            <div class="search" style="float: left;">
+                <img style="width: 550px;" src="../picture/搜索框.png">
+            </div>
+        </div>
+        
+        <div class="divide_line"></div>
+
+        <div class="content">
+            <div id="center_nav">
+                <div class="head">
+                    <div id="title">修改个人信息</div>
+                    <div class="divide_line1"></div>
+                    <div >
+<!--                        <form action="#">-->
+                            <ul type="none" id="edit">
+<!--                                <li>-->
+<!--                                    用户名：<input style="margin-left: 20px;" type="text" id="username1" name="account" value=""/>-->
+<!--                                </li>-->
+<!--                                <li>-->
+<!--                                    电话号码：<input type="text" id="tele" name="telephone" value="输入电话号码"/>-->
+<!--                                </li>-->
+<!--                                <li>-->
+<!--                                    地址：<input style="margin-left: 36px;" type="text" id="addr" name="address" value="输入地址"/>-->
+<!--                                </li>-->
+<!--                                <li>-->
+<!--                                    邮箱：<input style="margin-left: 36px;" type="text" id="email1" name="email" value="输入邮箱"/>-->
+<!--                                </li>-->
+                            </ul>    
+                            <div>
+                                <button type="submit" onclick="editUser()" id="#button1">修改</button>
+                            </div>
+<!--                        </form>                      -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+         <!--底部-->
+         <div style="  width: 100%;border-bottom: 3px solid #999595;"></div>
+         <div id="bottom1">
+             <ul class="foot_list" type="none">
+                 <li>
+                     <ul class="float" type="none">
+                         <li class="head">购物指南</li>
+                         <li>购物流程</li>
+                         <li>发票制度</li>
+                         <li>服务协议</li>
+                         <li>会员优惠</li>
+                     </ul>
+                 </li>
+                 <li>
+                     <ul class="float" type="none">
+                         <li class="head">支付方式</li>
+                         <li>网上支付</li>
+                         <li>礼品卡支付</li>
+                         <li>银行转帐</li>
+                         <li>礼券支付</li>
+                     </ul>
+                 </li>
+                 <li>
+                     <ul class="float" type="none">
+                         <li class="head">配送方式 </li>
+                         <li>当日递</li>
+                         <li>次日达</li>
+                         <li>订单自提</li>
+                         <li>验货与签收</li>
+                     </ul>
+                 </li>
+                 <li>
+                     <ul class="float" type="none">
+                         <li class="head">退换货</li>
+                         <li>退换货服务查询</li>
+                         <li>自助申请退换货</li>
+                         <li>退换货进度查询</li>
+                         <li>退款方式和时间</li>
+                     </ul>
+                 </li>
+                 <li>
+                     <ul class="float" type="none">
+                         <li class="head">商家服务</li>
+                         <li>商家中心</li>
+                         <li>运营服务</li>
+                     </ul>
+                 </li>
+             </ul>
+             <div class="clear"></div>
+             <div class="foot_line"></div>
+             <p align="center" class="test">
+                 <span>Copyright © 2021 All Right Reserved 毛氏软件股份有限公司版权所有</span>
+                 <br/>
+                 <br/>
+                 <span>长沙理工大学云塘校区版权所有 咨询热线：400-658-0166 400-658-1022</span>
+             </p>
+        </div>
+    </div>
+</body>
+</html>

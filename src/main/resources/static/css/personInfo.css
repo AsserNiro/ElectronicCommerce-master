@@ -1,0 +1,241 @@
+@charset "utf-8";
+body {
+    font-family:Microsoft YaHei, Segoe UI, Tahoma, Arial, Verdana, sans-serif, "新宋体";
+    font-size:12px;
+    color:#000000;
+    height:100%;
+    line-height:1;
+    background: #ffffff;
+    background-size: 100% 1320px;
+}
+* {
+    margin:0 auto;
+    padding:0px;
+}
+.clear{
+    clear: both;
+}
+.top{
+    width: 100%;
+    margin: 0 auto;
+    background-color: #e2d9d9;
+    height: 40px;
+}
+.top .span1{
+    font-size: 18px;
+    line-height: 40px;
+    float: left;
+    color: gray;
+    margin-left: 650px;
+}
+.top .right{
+    float: right;
+    line-height: 40px;
+    margin-right: 120px;
+    font-size: 14px;
+    font-weight:600;
+}
+a{
+    cursor: pointer;
+    color:rgb(238, 56, 56);
+    text-decoration:none;
+}
+a:hover{
+    color:orange;
+    text-decoration:none;
+}
+
+.logo_line{
+    height: 100px;
+    width: 1500px;
+    margin: 0 auto;
+    position: relative;
+}
+.logo_line .search{
+    position: absolute;
+    margin-top: 20px;
+    height: 48px;
+    z-index: 9999;
+    left: 362px;
+    top: 0;
+    margin-left: 200px;
+}
+
+.divide_line{
+    width: 100%;
+    height: 40px;
+    border-bottom: 3px solid #999595;
+}
+
+.content{
+    width: 100%;
+    background-color: #F0F0F0;
+    /* height: 500px; */
+}
+
+#center_nav{
+    width: 1200px;
+    background-color: #ffffff;
+    margin: 0 auto;
+
+}
+
+.center_nav .head{
+    float: left;
+    width: 600px;
+}
+
+#center_nav #title{
+    padding-top: 30px;
+    color: rgb(24, 20, 20);
+    font-weight: 700;
+    text-indent: 20px;
+    font-size: 20px;
+    text-align: center;
+}/*标题*/
+
+.head .divide_line1{
+    width: 400px;
+    margin-top: 10px;
+    border-bottom: 3px solid #999595;
+}
+.head ul{
+    margin-left: 450px;
+    margin-top: 30px;
+}
+.head ul li{
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 30px;
+    
+}
+.head ul li input[type=text], input[type=password] {
+    width:200px;
+    height:30px;
+    margin-top:10px;
+    padding:0px 15px;
+    border:1px solid rgba(0, 0, 0, .15);
+    border-radius:6px;
+    color:#000000;
+    letter-spacing:2px;
+    font-size:16px;
+    background:transparent;
+}
+input:focus {
+    outline:none;
+    box-shadow:0 2px 3px 0 rgba(0, 0, 0, .1) inset, 0 2px 7px 0 rgba(0, 0, 0, .2)
+}
+
+button {
+    cursor:pointer;
+    width:100px;
+    height:40px;
+    background: #3881e0;
+    border:1px solid #116ce2;
+    border-radius:6px;
+    font-weight:500;
+    margin-left: 550px;
+    margin-bottom: 50px;
+    color:#fff;
+    font-size:20px;
+    text-shadow:0 1px 2px rgba(0, 0, 0, .1);
+}
+
+#center_content{
+    float: left;
+    margin-left: 20px;
+}
+
+#center_content li{
+    width: 250px;
+    line-height: 20px;
+    position: relative;
+    padding: 5px;
+    border-style: solid;
+    border-color: rgb(204, 204, 204);
+    margin-bottom: 40px;
+    background: #fff;
+    height: 400px;
+    float: left;
+    margin-left: 30px;
+}
+
+
+#center_content li a:hover{
+    border-color: rgb(238, 51, 51);
+}
+ 
+#center_nav #image{
+    width: 230px;
+    margin-top: 10px;
+    margin-left: 10px;
+}
+#center_nav #price{
+    font-size: 16px;
+    font-weight: 700;
+    color: red;
+    margin-left: 20px;
+    margin-bottom: 5px;
+}
+#center_nav #name{
+    font-size: 16px;
+    color: rgb(14, 12, 12);
+    margin-left: 15px;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+#center_nav #comment{
+    font-size: 16px;
+    margin-left: 20px;
+    padding-top: 10px;
+}
+
+
+
+
+
+#bottom1{
+    width: 100%;
+    background: #efefef;
+    height: 310px;
+}
+.foot_list{
+    padding-top: 20px;
+    width: 1100px;
+    margin: 0 auto;
+}
+.foot_list>li{
+    width: 200px;
+    float: left;
+    margin-left: 20px;
+}
+
+.float{
+    float: left;
+}
+
+
+.foot_list .head{
+    font-size: 20px;
+    font-weight: 700;
+    padding-bottom: 10px;
+    color:black;
+}
+.foot_list li{
+    font-size: 15px;
+    margin-bottom: 10px;
+    color: gray;
+}
+
+.foot_line{
+    border-bottom: 1px solid #ccc;
+    width: 100%;
+    margin-top: 10px;
+}
+#bottom1 .test{
+    padding-top: 10px;
+}
+#bottom1 .test span{
+    font-size: 15px;
+    padding: 20px;
+}

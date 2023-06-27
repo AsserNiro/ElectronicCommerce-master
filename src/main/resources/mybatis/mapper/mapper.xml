@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.medivh.electroniccommerce.dao.Mapper">
+    <select id="selectUserByUsername" resultType="User">
+        select *
+        from user
+        where username = #{username}
+    </select>
+    <select id="checkUserIncludeTel" resultType="User">
+        select *
+        from user
+        where username = #{user.username}
+          and telephone = #{user.telephone}
+    </select>
+    <select id="selectAllUsers" resultType="User">
+        select *
+        from user
+    </select>
+    <select id="selectUser" resultType="User">
+        select *
+        from user
+        where id = #{id}
+    </select>
+    <select id="verifyLogin" resultType="User">
+        select *
+        from user
+        where username = #{user.username}
+          and password = #{user.password}
+    </select>
+    <insert id="insertUser">
+        insert into user(username, password, telephone) value (#{user.username}, #{user.password}, #{user.telephone})
+    </insert>
+    <update id="modifyPassword">
+        update user
+        set password = #{user.password}
+        where username = #{user.username}
+          and telephone = #{user.telephone}
+    </update>
+    <update id="modifyUser">
+        update user
+        set username  = #{user.username},
+            password  = #{user.password},
+            telephone = #{user.telephone}
+        where id = #{user.id}
+    </update>
+    <delete id="deleteUser">
+        delete
+        from account
+        where id = #{id}
+    </delete>
+    <select id="selectAllGoods" resultType="Goods">
+        select *
+        from goods
+    </select>
+    <delete id="deleteGood">
+        delete
+        from good
+        where id = #{id}
+    </delete>
+    <update id="modifyGoods">
+        update goods
+        set name      =#{goods.name}
+          , price     = #{goods.price}
+          , introduce = #{goods.introduce}
+          , category  = #{goods.category}
+          , img       = #{goods.img}
+        where id = #{goods.id}
+    </update>
+    <select id="selectGoods" resultType="Goods">
+        select *
+        from goods
+        where id = #{id}
+    </select>
+    <select id="postAllMyOrder" resultType="OrderResult">
+        select `order`.id,
+               `order`.userId,
+               `order`.goodId,
+               good.name,
+               good.author,
+               good.price,
+               good.introduce,
+               good.category,
+               good.img,
+               good.detailImg,
+               `order`.time,
+               `order`.cno
+        from `order`,
+             good
+        where userId = #{userId}
+          and `order`.goodId = good.id;
+    </select>
+    <select id="postAllMyCart" resultType="CartResult">
+        select cart.id,
+               cart.userId,
+               cart.goodId,
+               good.name,
+               good.author,
+               good.price,
+               good.introduce,
+               good.category,
+               good.img,
+               good.detailImg
+        from cart,
+             good
+        where userId = #{userId}
+          and cart.goodId = good.id;
+    </select>
+    <insert id="addCart">
+        insert into cart(userId, goodId) VALUE (#{userId}, #{goodId})
+    </insert>
+    <delete id="deleteCart">
+        delete
+        from cart
+        where id = #{id}
+    </delete>
+    <delete id="deleteOrder">
+        delete
+        from `order`
+        where id = #{id}
+    </delete>
+    <insert id="addOrder">
+        insert into `order`(userId, time, cno, goodId) value (#{userId}, #{time}, #{cno}, #{goodId})
+    </insert>
+    <select id="getCartById" resultType="Cart">
+        select *
+        from cart
+        where id = #{id};
+    </select>
+    <insert id="addGood">
+        insert into good(name, author, price, introduce, category, img, detailImg) value
+            (#{good.name},
+             #{good.author},
+             #{good.price},
+             #{good.introduce},
+             #{good.category},
+             #{good.img},
+             #{good.detailImg})
+    </insert>
+</mapper>

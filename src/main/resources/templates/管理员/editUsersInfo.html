@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link type="text/css" rel="stylesheet" href="../css/users.css">
+    <script src="../js/jquery3.6.0.min.js"></script>
+    <script src="../js/getUrlParam.js"></script>
+    <script src="../js/cookie.js"></script>
+    <title>编辑用户信息</title>
+    <script>
+        function editUser() {
+            const id = cookie.getCookie("myid");
+            const username = document.getElementById("userName").value;
+            const password = document.getElementById("userPassword").value;
+            const tele = document.getElementById("userTele").value;
+            const addr = document.getElementById("userAddr").value;
+            const email = document.getElementById("userEmail").value;
+            if(confirm("是否修改")){
+                $.ajax({
+                    url: "/editUsersInfo1",
+                    type: "POST",    //提交方式
+                    data: {"id":id,"username": username, "password": password, "telephone": tele, "address": addr, "email": email},
+                    dataType: "json",
+
+                }).done(function (data) {
+                    if (data.res === 1) {
+                        alert("修改成功")
+                        location.href = "usersManage"
+                    } else {
+                        $('.div1').show().html('用户名或密码输入错误')
+                        alert("修改失败")
+                    }
+                })
+            }else {
+                alert("取消修改")
+            }
+
+        }
+    </script>
+    <script>
+        $(document).ready(function () {
+            //获取tbody
+            let userData = $("#editUser");
+            let temp = '';
+            let id = cookie.getCookie("myid")
+            $.ajax({
+                //请求路径servlet
+                url: "/editUsersInfo",
+                type: "post",
+                dataType: "json",
+                async: true,//是否异步
+                data: {"id": id},
+                //请求成功
+                success: function (msg) {
+                    let users = msg;
+                    userData.empty();//清空
+                    temp +=
+    '                    <tr class="evenNumber">\n' +
+    '                        <td class="td1">用户名：&nbsp;</td>\n' +
+    '                        <td class="td2">\n' +
+    '                            <input class="input1"  type="text" id="userName" value=' + users.username + '>\n' +
+    '                        </td>\n' +
+    '                    </tr>\n' +
+    '                    <tr>\n' +
+    '                        <td class="td1">密码：&nbsp;</td>\n' +
+    '                        <td class="td2">\n' +
+    '                            <input class="input1" type="text" id="userPassword" value=' + users.password + '>\n' +
+    '                        </td>\n' +
+    '                    </tr>\n' +
+    '                    <tr class="evenNumber">\n' +
+    '                        <td class="td1">电话号码：&nbsp;</td>\n' +
+    '                        <td class="td2">\n' +
+    '                            <input class="input1"  type="text" id="userTele" value=' + users.telephone + '>\n' +
+    '                        </td>\n' +
+    '                    </tr>\n' +
+    '                     <tr >\n' +
+    '                        <td class="td1">地址：&nbsp;</td>\n' +
+    '                        <td class="td2">\n' +
+    '                            <input class="input1"  type="text" id="userAddr" value=' + users.address + '>\n' +
+    '                        </td>\n' +
+    '                    </tr>\n' +
+    '                    <tr class="evenNumber">\n' +
+    '                        <td class="td1">邮箱：&nbsp;</td>\n' +
+    '                        <td class="td2">\n' +
+    '                            <input class="input1"  type="text" id="userEmail" value=' + users.email + '>\n' +
+    '                        </td>\n' +
+    '                    </tr>'
+                    ;
+                    userData.append(temp);
+                },
+                //请求失败
+                error: function (e) {
+                    alert("request failed !")
+                }
+            })
+        });
+    </script>
+</head>
+
+<body>
+<div class="header">
+    <img src="../picture/书籍管理.png" height="80px" style="padding-left: 30px;padding-top: 15px;float: left">
+    <p class="p1">毛杜网上书城系统平台(管理员系统)</p>
+    <span class="back"><a href="login">退出系统</a></span>
+    <div class="clear"></div>
+    <p class="p2">Maodu online bookstore system platform</p>
+    <div class="clear"></div>
+</div>
+<div class="clear"></div>
+<div class="information">
+        <span class="time">
+            <script>
+                var obj = new Date();
+                var year = obj.getFullYear();
+                var month = obj.getMonth() + 1;
+                var date = obj.getDate();
+                var hour = obj.getHours();
+                var minute = obj.getMinutes();
+                var second = obj.getSeconds();
+                var weekend = obj.getDay(); //获取星期几，这里获得到的是数字1-7，所以我下面自己new了一个数组把获取到的数字当下标
+                var weeks = new Array("星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六");
+                var day = weeks[weekend];//这样就是显示的星期x了
+                // //这些if判断是在小于10的时候前面自动补0
+                if (month < 10) {
+                    month = '0' + month;
+                }
+                if (date < 10) {
+                    date = '0' + date;
+                }
+                if (hour < 10) {
+                    hour = '0' + hour;
+                }
+                if (minute < 10) {
+                    minute = '0' + minute;
+                }
+                if (second < 10) {
+                    second = '0' + second;
+                }
+                document.write("   今天是：  " + year + "年" + month + "月" + date + "日 " + day + " " + hour + ":" + minute + ":" + second);
+            </script>
+        </span>
+    <span class="employee">
+           欢迎 管理员 进入毛杜网上书城后台管理系统
+        </span>
+</div>
+<div class="clear"></div>
+<div>
+    <div class="left">
+        <ul type="none">
+            <li><a href="goodsManage">商品信息管理</a></li>
+            <li><a style="color:white;" href="#">用户信息管理</a></li>
+        </ul>
+    </div>
+    <form>
+        <button class="button2" style="float: right;margin-right: 40px;margin-top: 20px;" type="submit"><a href="usersManage">返回</a></button>
+    </form>
+    <div class="center">
+        <table class="content">
+            <thead>
+            <tr style="height: 50px;">
+                <th colspan="2" style="font-size: 18px;padding-left: 500px;">编辑用户信息</th>
+            </tr>
+            </thead>
+            <tbody id="editUser">
+
+            </tbody>
+        </table>
+        <div style="text-align: center">
+            <button class="button2" style="margin-top: 20px;" type="submit" onclick="editUser()">修改</button>
+        </div>
+    </div>
+</div>
+</body>
+</html>
